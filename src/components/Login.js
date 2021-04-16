@@ -10,36 +10,36 @@ class Login extends Component {
       password: "",
     },
   };
-  handleChange = async (e) => {
+  handleChange = async (event) => {
     await this.setState({
       form: {
         ...this.state.form,
-        [e.target.name]: e.target.value,
+        [event.target.name]: event.target.value,
       },
     });
   };
 
   validateUser = async () => {
+    
     await axios
-      .get(baseUrl, {
-        params: {
-          user: this.state.form.username,
-          password: this.state.form.password,
+      .post(
+        baseUrl,
+        {
+          data: {
+            user: this.state.form.user,
+            password: this.state.form.password,
+          },
         },
-      })
+        { headers: { "Content-Type": "application/json" } }
+      )
       .then((response) => {
-        console.log(response.data);
-      })
-      .then((response) => {
-        if (response.length > 0) {
+        if (response.data.length > 0) {
           console.log("Login successful");
-          window.location.href = "./menu";
-        } else {
-          console.log("Invalid data");
+          window.location.href = "./home";
         }
       })
       .catch((error) => {
-        alert("Invalid data2");
+        alert("Invalid data");
         console.log(error);
       });
   };
@@ -47,9 +47,7 @@ class Login extends Component {
   render() {
     return (
       <div className="container mt-5 border border-info rounded w-50">
-        <h4 className="text-center mt-3">
-          Shortener System
-        </h4>
+        <h4 className="text-center mt-3">Shortener System</h4>
 
         <form className="m-5">
           <div className="mb-3 row">

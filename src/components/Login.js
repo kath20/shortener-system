@@ -6,13 +6,13 @@ const baseUrl = "http://localhost:3000/login";
 
 class Login extends Component {
   state = {
-    from: {
+    form: {
       user: "",
       password: "",
-    },
+    }
   };
   showAlert(title, text, icon) {
-    swal({title, text, icon,button:false, timer:2000});
+    swal({ title, text, icon, button: false, timer: 2000 });
   }
   handleChange = async (event) => {
     await this.setState({
@@ -24,30 +24,34 @@ class Login extends Component {
   };
 
   validateUser = async () => {
-    
-    await axios
-      .post(
-        baseUrl,
-        {
-          data: {
-            user: this.state.form.user,
-            password: this.state.form.password,
+    const { user,password } = this.state.form;
+    if (user !== "" && password !== "") {
+      await axios
+        .post(
+          baseUrl,
+          {
+            data: {
+              user,
+              password,
+            },
           },
-        },
-        { headers: { "Content-Type": "application/json" } }
-      )
-      .then((response) => {
-        if (response.data) {
-          console.log("Login successful");
-          window.location.href = "./home";
-        }else{
-            this.showAlert("Something went wrong","Invalid data","warning");
-        }
-      })
-      .catch((error) => {
-        alert("Invalid data");
-        console.log(error);
-      });
+          { headers: { "Content-Type": "application/json" } }
+        )
+        .then((response) => {
+          if (response.data) {
+            console.log("Login successful");
+            window.location.href = "./home";
+          } else {
+            this.showAlert("Something went wrong", "Invalid data", "warning");
+          }
+        })
+        .catch((error) => {
+          alert("Invalid data");
+          console.log(error);
+        });
+    } else {
+        this.showAlert("Something went wrong", "You must fill all the spaces", "warning");
+    }
   };
 
   render() {

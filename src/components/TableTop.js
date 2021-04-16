@@ -45,7 +45,7 @@ class TableTop extends Component {
           </thead>
           <tbody>
             {urlList.map((url, index) => (
-              <tr>
+              <tr key={index}>
                 <th scope="row">{index+1}</th>
                 <td>{url.url}</td>
                 <td>{url.visits}</td>

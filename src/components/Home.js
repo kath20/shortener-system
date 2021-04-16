@@ -7,7 +7,7 @@ const baseUrl = "http://localhost:3000/newShortcut";
 
 class Home extends Component {
   state = {
-    from: {
+    form: {
       url: "",
     },
   };
@@ -25,6 +25,8 @@ class Home extends Component {
   };
 
   saveUrl = async () => {
+      const {url}=this.state.form;
+      if(url!==""){
     await axios
       .post(
         baseUrl,
@@ -45,7 +47,9 @@ class Home extends Component {
         //alert(error.response.data);
         this.showAlert("Ups, error",error.response.data,"error");
         console.log(error);
-      });
+      });}else{
+        this.showAlert("Something went wrong", "You must fill all the spaces", "warning");
+      }
   };
   closeSession = () => {
     window.location.href = "./";

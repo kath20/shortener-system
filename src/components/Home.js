@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TableTop from "./TableTop";
 import axios from "axios";
+import swal from "sweetalert";
 
 const baseUrl = "http://localhost:3000/newShortcut";
 
@@ -9,8 +10,11 @@ class Home extends Component {
     from: {
       url: "",
     },
-    
   };
+  showAlert(title, text, icon) {
+    swal({title, text, icon,button:false, timer:3000});
+  }
+
   handleChange = async (event) => {
     await this.setState({
       form: {
@@ -21,7 +25,6 @@ class Home extends Component {
   };
 
   saveUrl = async () => {
-    
     await axios
       .post(
         baseUrl,
@@ -34,11 +37,13 @@ class Home extends Component {
       )
       .then((response) => {
         if (response.data.length > 0) {
-          alert(response.data);
+          //alert(response.data);
+          this.showAlert("Url saved",response.data,"success");
         }
       })
       .catch((error) => {
-        alert(error.response.data);
+        //alert(error.response.data);
+        this.showAlert("Ups, error",error.response.data,"error");
         console.log(error);
       });
   };
@@ -64,13 +69,18 @@ class Home extends Component {
             />
           </div>
           <div className="mb-3">
-            <button type="button" className="btn btn-info mb-3" onClick={() => this.saveUrl()}>
+            <button
+              type="button"
+              className="btn btn-info mb-3"
+              onClick={() => this.saveUrl()}
+            >
               Generate shortcode
             </button>
           </div>
         </form>
+
         <TableTop></TableTop>
-        <button onClick={() => this.closeSession()}>Cerrar sesion</button>
+        <button className="btn btn-danger mb-3" onClick={() => this.closeSession()}>Sign off</button>
       </div>
     );
   }

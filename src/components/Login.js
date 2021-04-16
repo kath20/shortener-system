@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import swal from "sweetalert";
 
 const baseUrl = "http://localhost:3000/login";
 
@@ -10,6 +11,9 @@ class Login extends Component {
       password: "",
     },
   };
+  showAlert(title, text, icon) {
+    swal({title, text, icon,button:false, timer:2000});
+  }
   handleChange = async (event) => {
     await this.setState({
       form: {
@@ -33,9 +37,11 @@ class Login extends Component {
         { headers: { "Content-Type": "application/json" } }
       )
       .then((response) => {
-        if (response.data.length > 0) {
+        if (response.data) {
           console.log("Login successful");
           window.location.href = "./home";
+        }else{
+            this.showAlert("Something went wrong","Invalid data","warning");
         }
       })
       .catch((error) => {
